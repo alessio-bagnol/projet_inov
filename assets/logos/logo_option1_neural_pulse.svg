@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Logo Mark (Left) -->
+  <g transform="translate(20, 16)">
+    <!-- Rounded Background Tile -->
+    <rect x="0" y="0" width="128" height="128" rx="28" fill="#0F172A" />
+    
+    <!-- Outer Focus Grid Ring -->
+    <circle cx="64" cy="64" r="50" fill="none" stroke="#1E293B" stroke-width="2" stroke-dasharray="6 4" />
+    
+    <!-- Diagonal 1 of the X (Tech Slate to Cyan) -->
+    <path d="M38 38 L90 90" stroke="#334155" stroke-width="8" stroke-linecap="round" />
+    <circle cx="90" cy="90" r="4" fill="#38BDF8" />
+
+    <!-- Diagonal 2 morphed into ECG Wave Pulse -->
+    <path d="M90 38 L72 56 L66 42 L58 84 L50 64 L38 90" 
+          stroke="url(#pulseGrad)" 
+          stroke-width="5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          filter="url(#subtleGlow)" />
+    <circle cx="66" cy="42" r="3.5" fill="#38BDF8" />
+    <circle cx="58" cy="84" r="3.5" fill="#38BDF8" />
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(170, 78)">
+    <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="900" letter-spacing="-0.5" fill="#0F172A">
+      PREVENT<tspan fill="#0284C7">-X</tspan>
+    </text>
+  </g>
+
+  <!-- Clinical AI Badge -->
+  <g transform="translate(485, 45)">
+    <rect x="0" y="0" width="60" height="30" rx="8" fill="#E0F2FE" />
+    <text x="30" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800" fill="#0284C7" text-anchor="middle" letter-spacing="1">AI</text>
+  </g>
+
+  <!-- Subtitle -->
+  <g transform="translate(172, 114)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#64748B" letter-spacing="2.5">
+      CLINICAL DECISION INTELLIGENCE
+    </text>
+  </g>
+</svg>

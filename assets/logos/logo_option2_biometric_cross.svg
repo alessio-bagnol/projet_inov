@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="crossGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#0D9488" />
+    </linearGradient>
+    <linearGradient id="heartPulse" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+  </defs>
+
+  <!-- Logo Mark -->
+  <g transform="translate(20, 16)">
+    <!-- Light Clinical Surface Tile -->
+    <rect x="0" y="0" width="128" height="128" rx="28" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2" />
+    
+    <!-- Target / Crosshair concentric circles -->
+    <circle cx="64" cy="64" r="46" fill="none" stroke="#E0E7FF" stroke-width="2" />
+    <circle cx="64" cy="64" r="32" fill="none" stroke="#C7D2FE" stroke-width="1.5" stroke-dasharray="4 4" />
+
+    <!-- Stylized Modern Medical Cross with Rounded Fluid Nodes -->
+    <path d="M52 28 H76 V52 H100 V76 H76 V100 H52 V76 H28 V52 H52 Z" 
+          fill="url(#crossGrad)" 
+          opacity="0.95" 
+          rx="6" />
+
+    <!-- Embedded Center Pulse Vitals Icon -->
+    <path d="M42 64 L54 64 L59 52 L67 76 L73 60 L78 64 L86 64" 
+          stroke="#FFFFFF" 
+          stroke-width="3.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          fill="none" />
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(170, 78)">
+    <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="900" letter-spacing="-0.5" fill="#0F172A">
+      PREVENT<tspan fill="#2563EB">-X</tspan>
+    </text>
+  </g>
+
+  <!-- AI Capsule Tag -->
+  <g transform="translate(485, 45)">
+    <rect x="0" y="0" width="60" height="30" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5" />
+    <text x="30" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800" fill="#2563EB" text-anchor="middle" letter-spacing="1">AI</text>
+  </g>
+
+  <!-- Subtitle -->
+  <g transform="translate(172, 114)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#0D9488" letter-spacing="2.5">
+      MULTIMODAL CARDIOVASCULAR & BONE SCAN
+    </text>
+  </g>
+</svg>

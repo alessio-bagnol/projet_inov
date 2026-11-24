@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1B4B" />
+      <stop offset="100%" stop-color="#312E81" />
+    </linearGradient>
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Logo Mark -->
+  <g transform="translate(20, 16)">
+    <!-- Base Shield Shape -->
+    <path d="M64 16 L112 36 V76 C112 102 64 122 64 122 C64 122 16 102 16 76 V36 Z" 
+          fill="url(#shieldGrad)" />
+    
+    <!-- Inner Accent Shield Contour -->
+    <path d="M64 26 L102 43 V74 C102 94 64 110 64 110 C64 110 26 94 26 74 V43 Z" 
+          fill="none" 
+          stroke="#4338CA" 
+          stroke-width="2" />
+
+    <!-- Neural Medical 'X' in center -->
+    <path d="M46 50 L82 86 M82 50 L46 86" 
+          stroke="url(#neonCyan)" 
+          stroke-width="5" 
+          stroke-linecap="round" />
+
+    <!-- Center Sentinel Node Pulse -->
+    <circle cx="64" cy="68" r="7" fill="#FFFFFF" />
+    <circle cx="64" cy="68" r="14" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.6" />
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(170, 78)">
+    <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="900" letter-spacing="-0.5" fill="#0F172A">
+      PREVENT<tspan fill="#4F46E5">-X</tspan>
+    </text>
+  </g>
+
+  <!-- High-Tech Badge -->
+  <g transform="translate(485, 45)">
+    <rect x="0" y="0" width="60" height="30" rx="8" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5" />
+    <text x="30" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800" fill="#4F46E5" text-anchor="middle" letter-spacing="1">AI</text>
+  </g>
+
+  <!-- Subtitle -->
+  <g transform="translate(172, 114)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#6366F1" letter-spacing="2.5">
+      5-YEAR CARDIOVASCULAR & STROKE PREDICTION
+    </text>
+  </g>
+</svg>

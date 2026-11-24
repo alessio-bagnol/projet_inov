@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background subtle gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <!-- Main Cross / Heart Flow Gradient -->
+    <linearGradient id="medGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="50%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#0D9488" />
+    </linearGradient>
+
+    <!-- Scanner Glow -->
+    <linearGradient id="scanGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.2" />
+      <stop offset="50%" stop-color="#2563EB" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.2" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#1E3A8A" flood-opacity="0.18" />
+    </filter>
+    <filter id="innerGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0284C7" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Clean Canvas Base (Optional Rounded App Icon Tile) -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" stroke="#E2E8F0" stroke-width="4" />
+
+  <!-- Radiology Scanner Circular Rings -->
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#E2E8F0" stroke-width="2" />
+  <circle cx="256" cy="256" r="150" fill="none" stroke="url(#scanGlow)" stroke-width="4" stroke-dasharray="16 12" />
+  <circle cx="256" cy="256" r="110" fill="none" stroke="#E0E7FF" stroke-width="2" stroke-dasharray="8 6" />
+
+  <!-- Central Biometric Cross / Heart Synergy Mark -->
+  <g filter="url(#dropShadow)">
+    <!-- Modern Soft-Beveled Medical Cross Shape -->
+    <path d="M 216 100 
+             C 216 88, 228 76, 240 76 
+             L 272 76 
+             C 284 76, 296 88, 296 100 
+             L 296 216 
+             L 412 216 
+             C 424 216, 436 228, 436 240 
+             L 436 272 
+             C 436 284, 424 296, 412 296 
+             L 296 296 
+             L 296 412 
+             C 296 424, 284 436, 272 436 
+             L 240 436 
+             C 228 436, 216 424, 216 412 
+             L 216 296 
+             L 100 296 
+             C 88 296, 76 284, 76 272 
+             L 76 240 
+             C 76 228, 88 216, 100 216 
+             L 216 216 
+             Z" 
+          fill="url(#medGrad)" />
+
+    <!-- Stylized Internal Heart Anatomy Flow -->
+    <path d="M 256 160 
+             C 230 135, 180 145, 180 190 
+             C 180 235, 256 295, 256 295 
+             C 256 295, 332 235, 332 190 
+             C 332 145, 282 135, 256 160 Z" 
+          fill="#FFFFFF" 
+          opacity="0.16" />
+
+    <!-- Dynamic White Biometric Pulse Line -->
+    <path d="M 140 256 
+             L 190 256 
+             L 210 210 
+             L 240 310 
+             L 270 190 
+             L 295 285 
+             L 320 256 
+             L 372 256" 
+          stroke="#FFFFFF" 
+          stroke-width="12" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          fill="none" 
+          filter="url(#innerGlow)" />
+
+    <!-- Center Sentinel Pulse Node -->
+    <circle cx="270" cy="190" r="8" fill="#38BDF8" />
+  </g>
+
+  <!-- 4 Corner Precision Targets -->
+  <circle cx="100" cy="100" r="4" fill="#94A3B8" />
+  <circle cx="412" cy="100" r="4" fill="#94A3B8" />
+  <circle cx="100" cy="412" r="4" fill="#94A3B8" />
+  <circle cx="412" cy="412" r="4" fill="#94A3B8" />
+</svg>
