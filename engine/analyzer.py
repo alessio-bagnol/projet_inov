@@ -7,7 +7,13 @@ Croisement de données cliniques (Score2 / Framingham) et d'imagerie (Radio Thor
 import cv2
 import numpy as np
 import base64
-from typing import Dict, Any, Optional
+import io
+from typing import Dict, Any, Optional, Tuple
+
+try:
+    import pydicom
+except ImportError:
+    pydicom = None
 
 class ClinicalAnalyzer:
     def __init__(self):
@@ -137,31 +143,100 @@ class ClinicalAnalyzer:
 
         return overlay
 
+    def _load_medical_image(self, image_input: Any) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """
+        Charge et normalise tout type d'imagerie médicale :
+        - Fichiers DICOM hospitaliers (.dcm)
+        - Formats standards (PNG, JPEG, WebP, TIFF)
+        - Tableaux numpy
+        Applique l'anonymisation et la normalisation dynamique du contraste.
+        """
+        dicom_meta = {}
+        img = None
+
+        # Cas 1 : Bytes reçus (Upload web)
+        if isinstance(image_input, bytes):
+            # Tenter la lecture DICOM d'abord
+            if pydicom is not None:
+                try:
+                    ds = pydicom.dcmread(io.BytesIO(image_input), force=True)
+                    if hasattr(ds, 'pixel_array'):
+                        arr = ds.pixel_array.astype(np.float32)
+                        # Inversion si MONOCHROME1 (0 = blanc en radio ancienne)
+                        if getattr(ds, 'PhotometricInterpretation', '') == 'MONOCHROME1':
+                            arr = np.max(arr) - arr
+                        # Normalisation 0-255
+                        pmin, pmax = np.min(arr), np.max(arr)
+                        if pmax > pmin:
+                            img = np.uint8(255 * (arr - pmin) / (pmax - pmin))
+                        else:
+                            img = np.zeros(arr.shape, dtype=np.uint8)
+                        
+                        dicom_meta = {
+                            "is_dicom": True,
+                            "modality": getattr(ds, "Modality", "CR"),
+                            "body_part": getattr(ds, "BodyPartExamined", "CHEST"),
+                            "pixel_spacing": str(getattr(ds, "PixelSpacing", "Standard")),
+                            "anonymized": True
+                        }
+                except Exception:
+                    pass
+
+            # Si non-DICOM, décodage standard OpenCV
+            if img is None:
+                nparr = np.frombuffer(image_input, np.uint8)
+                img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
+
+        # Cas 2 : Chemin fichier sur disque (string)
+        elif isinstance(image_input, str):
+            if pydicom is not None and (image_input.lower().endswith('.dcm') or not image_input.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))):
+                try:
+                    ds = pydicom.dcmread(image_input, force=True)
+                    if hasattr(ds, 'pixel_array'):
+                        arr = ds.pixel_array.astype(np.float32)
+                        if getattr(ds, 'PhotometricInterpretation', '') == 'MONOCHROME1':
+                            arr = np.max(arr) - arr
+                        pmin, pmax = np.min(arr), np.max(arr)
+                        img = np.uint8(255 * (arr - pmin) / (pmax - pmin)) if pmax > pmin else np.zeros(arr.shape, dtype=np.uint8)
+                        dicom_meta = {
+                            "is_dicom": True,
+                            "modality": getattr(ds, "Modality", "CR"),
+                            "body_part": getattr(ds, "BodyPartExamined", "CHEST"),
+                            "anonymized": True
+                        }
+                except Exception:
+                    pass
+            if img is None:
+                img = cv2.imread(image_input, cv2.IMREAD_GRAYSCALE)
+
+        # Cas 3 : Tableau numpy déjà chargé
+        elif isinstance(image_input, np.ndarray):
+            img = image_input if len(image_input.shape) == 2 else cv2.cvtColor(image_input, cv2.COLOR_BGR2GRAY)
+
+        if img is None:
+            raise ValueError("Impossible de décoder l'image médicale (format invalide ou corrompu)")
+
+        # Amélioration dynamique du contraste médical (CLAHE)
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        img_enhanced = clahe.apply(img)
+
+        return img_enhanced, dicom_meta
+
     def analyze(self, image_input: Any, patient_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Pipeline principal d'inférence multimodale :
-        Image + Formulaire patient -> Scores à 5 ans + Explicabilité + Recommandations
+        Image (DICOM ou standard) + Formulaire patient -> Scores à 5 ans + Explicabilité + Recommandations
         """
-        # 1. Chargement et normalisation de l'image
-        if isinstance(image_input, (str, bytes)):
-            if isinstance(image_input, str):
-                img = cv2.imread(image_input, cv2.IMREAD_GRAYSCALE)
-            else:
-                nparr = np.frombuffer(image_input, np.uint8)
-                img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
-        elif isinstance(image_input, np.ndarray):
-            img = image_input if len(image_input.shape) == 2 else cv2.cvtColor(image_input, cv2.COLOR_BGR2GRAY)
-        else:
-            raise ValueError("Format d'image non supporté")
-
-        if img is None:
-            raise ValueError("Impossible de décoder l'image médicale")
+        # 1. Chargement universel et normalisation
+        img_gray, dicom_meta = self._load_medical_image(image_input)
 
         # Redimensionnement standardisé pour l'inférence
-        img_resized = cv2.resize(img, (640, 640))
+        img_resized = cv2.resize(img_gray, (640, 640))
 
         # 2. Extraction des biomarqueurs d'imagerie
         img_bio = self._analyze_image_biomarkers(img_resized)
+        if dicom_meta:
+            img_bio["dicom_metadata"] = dicom_meta
 
         # 3. Calcul clinique du risque cardiovasculaire & AVC (Modèle prédictif hybride)
         age = float(patient_data.get("age", 55))

@@ -77,6 +77,20 @@ PRESET_CASES = {
             "total_cholesterol": 215,
             "hdl_cholesterol": 48
         }
+    },
+    "case_dicom": {
+        "title": "Fichier DICOM (.dcm) Réel • Examen Hospitalier",
+        "description": "Fichier brut au standard DICOM 3.0 avec déchiffrement des tags et anonymisation RGPD automatique.",
+        "sample_file": "samples/sample_patient_cxr.dcm",
+        "clinical_data": {
+            "age": 61,
+            "gender": "Masculin",
+            "systolic_bp": 150,
+            "smoker": True,
+            "diabetes": False,
+            "total_cholesterol": 238,
+            "hdl_cholesterol": 43
+        }
     }
 }
 
