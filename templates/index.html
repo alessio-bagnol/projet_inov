@@ -3,482 +3,426 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PREVENT-X AI • Dispositif Médical d'Aide à la Décision Clinique</title>
+  <title>PREVENT-X AI • Console Clinique de Diagnostic Prédictif</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    /* Style console d'imagerie clinique */
+    .pacs-canvas {
+      background: #000000;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
+    }
+    .hud-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.75);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+<body class="bg-[#090D16] text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- TOP CLINICAL NAVBAR -->
-  <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      
-      <!-- Logo + Marque -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 p-0.5 flex items-center justify-center">
-          <img src="/assets/logos/logo_prevent_x_white_transparent.png" alt="PREVENT-X AI" class="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(56,189,248,0.4)]">
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-lg font-black tracking-tight text-white">PREVENT<span class="text-cyan-400">-X</span></span>
-            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AI</span>
-            <span class="text-[10px] font-semibold text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full">PoC v1.0 • M1B1</span>
-          </div>
-          <p class="text-[10px] text-slate-400">Aide à la décision clinique cardiovasculaire, AVC & ostéoporose</p>
-        </div>
+  <!-- TOP WORKSTATION BAR -->
+  <header class="border-b border-slate-800/80 bg-[#0C1220] px-4 lg:px-6 h-14 flex items-center justify-between">
+    
+    <!-- Logo & Titre Station -->
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 flex items-center justify-center">
+        <img src="/assets/logos/logo_prevent_x_white_transparent.png" alt="PREVENT-X Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">
       </div>
-
-      <!-- Statut & Profil Praticien -->
-      <div class="flex items-center gap-4 text-xs">
-        <div class="hidden md:flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-slate-300 font-medium">Moteur IA Prêt • Deep Learning Multimodal</span>
-        </div>
-        <div class="flex items-center gap-2 pl-3 border-l border-slate-800">
-          <div class="w-8 h-8 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center font-bold text-cyan-400 text-xs">
-            AB
-          </div>
-          <div class="hidden sm:block text-left leading-tight">
-            <div class="font-bold text-slate-200">Dr. A. Bagnol</div>
-            <div class="text-[10px] text-slate-400">Cardiologie Préventive</div>
-          </div>
-        </div>
+      <div class="flex items-center gap-2.5">
+        <span class="text-base font-bold tracking-tight text-white">PREVENT-X <span class="text-cyan-400">AI</span></span>
+        <span class="h-3.5 w-px bg-slate-700"></span>
+        <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Console Clinique PACS / RIS</span>
       </div>
-
     </div>
+
+    <!-- Sélecteur de Cas d'Examen Réels -->
+    <div class="hidden md:flex items-center gap-1.5 bg-slate-950/80 border border-slate-800 p-1 rounded-lg text-xs">
+      <span class="text-[10px] text-slate-500 px-2 font-mono uppercase">Radiographies Hospitalières :</span>
+      <button type="button" onclick="loadPreset('case1')" id="tab_case1" class="px-2.5 py-1 rounded font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+        Cas 1 : Aorte calcifiée (61 ans)
+      </button>
+      <button type="button" onclick="loadPreset('case2')" id="tab_case2" class="px-2.5 py-1 rounded font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+        Cas 2 : Examen sain (48 ans)
+      </button>
+      <button type="button" onclick="loadPreset('case3')" id="tab_case3" class="px-2.5 py-1 rounded font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+        Cas 3 : Cardiomégalie (72 ans)
+      </button>
+      <button type="button" onclick="loadPreset('case_dicom')" id="tab_case_dicom" class="px-2.5 py-1 rounded font-semibold text-cyan-400 bg-cyan-950/40 border border-cyan-800/50 hover:bg-cyan-900/40 transition">
+        Fichier DICOM (.dcm)
+      </button>
+    </div>
+
+    <!-- Praticien & Statut -->
+    <div class="flex items-center gap-3 text-xs">
+      <span class="inline-flex items-center gap-1.5 text-emerald-400 font-mono text-[11px] bg-emerald-950/40 border border-emerald-800/40 px-2.5 py-1 rounded">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        DISPOSITIF ACTIF • MDR 2017/745
+      </span>
+      <div class="text-right hidden sm:block">
+        <div class="text-xs font-semibold text-slate-200">Dr. A. Bagnol</div>
+        <div class="text-[10px] text-slate-500 font-mono">SERVICE CARDIOLOGIE</div>
+      </div>
+    </div>
+
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+  <!-- WORKSTATION 2-COLUMN VIEW -->
+  <main class="flex-1 w-full max-w-[1800px] mx-auto p-3 lg:p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
     
-    <!-- LEFT COLUMN: CAS PRE-EMBARQUES + FORMULAIRE PATIENT + UPLOAD (5 COLS) -->
-    <div class="lg:col-span-5 space-y-6">
+    <!-- GAUCHE : VISIONNEUSE RADIOLOGIQUE HAUTE FIDÉLITÉ (7 COLS) -->
+    <div class="lg:col-span-7 flex flex-col bg-[#0B0F19] border border-slate-800/90 rounded-xl overflow-hidden shadow-2xl">
       
-      <!-- 1. CAS CLINIQUES DE DEMONSTRATION EN 1 CLIC -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-            <span>⚡</span> Cas Prédéfinis de Démonstration
-          </h2>
-          <span class="text-[10px] text-slate-500">1-clic pour tester</span>
-        </div>
-        <div class="space-y-2">
-          <button type="button" onclick="loadPreset('case1')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-cyan-500/60 hover:bg-slate-800 transition flex items-center justify-between group">
-            <div>
-              <div class="text-xs font-bold text-slate-200 group-hover:text-cyan-400">Cas 1 : Homme 61 ans • Alerte AVC & Aorte</div>
-              <div class="text-[10px] text-slate-400">Fumeur, PAS 155 mmHg, calcification aortique visible</div>
-            </div>
-            <span class="text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded">Élevé</span>
+      <!-- Toolbar Imagerie -->
+      <div class="h-10 bg-slate-900/80 border-b border-slate-800/80 px-4 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400 font-mono text-[11px]">MODE RENDU :</span>
+          <button type="button" id="btnModeRaw" onclick="setImageMode('raw')" class="px-2.5 py-1 rounded font-semibold text-slate-400 hover:text-white transition">
+            Radio Réelle Brute
           </button>
-
-          <button type="button" onclick="loadPreset('case2')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-cyan-500/60 hover:bg-slate-800 transition flex items-center justify-between group">
-            <div>
-              <div class="text-xs font-bold text-slate-200 group-hover:text-cyan-400">Cas 2 : Femme 48 ans • Bilan Préventif Sain</div>
-              <div class="text-[10px] text-slate-400">Non-fumeuse, PAS 118 mmHg, radio pulmonaire normale</div>
-            </div>
-            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">Faible</span>
-          </button>
-
-          <button type="button" onclick="loadPreset('case3')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-cyan-500/60 hover:bg-slate-800 transition flex items-center justify-between group">
-            <div>
-              <div class="text-xs font-bold text-slate-200 group-hover:text-cyan-400">Cas 3 : Femme 72 ans • Cardiomégalie & Rachis</div>
-              <div class="text-[10px] text-slate-400">Diabète, RCT > 0.55, déminéralisation osseuse vertébrale</div>
-            </div>
-            <span class="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">Modéré</span>
-          </button>
-
-          <button type="button" onclick="loadPreset('case_dicom')" class="w-full text-left p-3 rounded-xl border border-cyan-500/40 bg-cyan-950/20 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-between group">
-            <div>
-              <div class="text-xs font-bold text-cyan-300 group-hover:text-cyan-400 flex items-center gap-1.5">
-                <span>📁</span> Fichier DICOM (.dcm) Hospitalier Réel
-              </div>
-              <div class="text-[10px] text-slate-400">Format d'imagerie clinique natif déchiffré par pydicom</div>
-            </div>
-            <span class="text-xs font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded uppercase">DICOM</span>
+          <button type="button" id="btnModeCam" onclick="setImageMode('cam')" class="px-2.5 py-1 rounded font-bold bg-cyan-600 text-white shadow-sm transition">
+            Explicabilité Grad-CAM
           </button>
         </div>
-      </div>
 
-      <!-- 2. ZONE D'IMAGERIE MEDICALE (UPLOAD OU PRESET) -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div class="flex items-center justify-between">
-          <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <span>🩻</span> Imagerie Thoracique / IRM (DICOM, PNG)
-          </label>
-          <span class="text-[10px] text-emerald-400 font-medium">Anonymisation RGPD active</span>
-        </div>
-
-        <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-cyan-500 rounded-xl p-5 text-center bg-slate-950/50 cursor-pointer transition flex flex-col items-center justify-center min-h-[160px] relative overflow-hidden">
-          <input type="file" id="fileInput" accept="image/*,.dcm" class="hidden">
-          <div id="previewContainer" class="hidden w-full h-36 relative">
-            <img id="imgThumbnail" class="w-full h-full object-contain rounded-lg">
-            <button type="button" onclick="clearUpload(event)" class="absolute top-1 right-1 bg-red-600/80 hover:bg-red-500 text-white rounded-full p-1 text-xs">✕</button>
-          </div>
-          <div id="uploadPrompt" class="space-y-2">
-            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-cyan-400 text-lg">
-              ⬆
-            </div>
-            <div class="text-xs text-slate-300 font-semibold">Glissez-déposez une radio ou <span class="text-cyan-400 underline">parcourez</span></div>
-            <p class="text-[10px] text-slate-500">Formats supportés : DICOM, PNG, JPEG, WebP</p>
+        <div class="flex items-center gap-4">
+          <!-- Inversion Négatif/Positif -->
+          <button type="button" onclick="toggleInvert()" class="text-slate-400 hover:text-white font-mono text-[11px] flex items-center gap-1">
+            <span>◑</span> Inverser LUT
+          </button>
+          <!-- Contraste dynamique -->
+          <div class="flex items-center gap-2 text-slate-400 text-[11px] font-mono">
+            <span>Contraste :</span>
+            <input type="range" id="contrastRange" min="80" max="180" value="100" oninput="adjustContrast(this.value)" class="w-16 accent-cyan-500">
           </div>
         </div>
       </div>
 
-      <!-- 3. FORMULAIRE CONSTANTES PATIENT -->
-      <form id="patientForm" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-          <span>📋</span> Données Cliniques du Patient
-        </h2>
-
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1">Âge (années)</label>
-            <input type="number" id="inpAge" value="61" min="18" max="105" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1">Sexe</label>
-            <select id="inpGender" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none">
-              <option value="Masculin">Masculin</option>
-              <option value="Féminin">Féminin</option>
-            </select>
-          </div>
+      <!-- Cadre Radiologie avec incrustations HUD (Heads-Up Display DICOM) -->
+      <div class="pacs-canvas relative flex-1 min-h-[460px] lg:min-h-[580px] flex items-center justify-center overflow-hidden select-none">
+        
+        <!-- Incrustation DICOM Top-Left -->
+        <div class="absolute top-3 left-4 hud-tag space-y-0.5 pointer-events-none z-10">
+          <div class="font-bold text-slate-200" id="hudPatientId">ID : ANONYMIZED_PX9021</div>
+          <div id="hudPatientMeta">M | 61Y | CHEST PA</div>
+          <div class="text-slate-400 text-[10px]">PROJECTION : POSTÉRO-ANTÉRIEURE</div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1">Pression Artérielle PAS (mmHg)</label>
-            <input type="number" id="inpSbp" value="155" min="80" max="240" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1">Cholestérol Total (mg/dL)</label>
-            <input type="number" id="inpTotChol" value="245" min="100" max="400" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none">
-          </div>
+        <!-- Incrustation DICOM Top-Right -->
+        <div class="absolute top-3 right-4 hud-tag text-right space-y-0.5 pointer-events-none z-10">
+          <div class="font-bold text-cyan-400">PREVENT-X CLINICAL AI</div>
+          <div class="text-slate-400 text-[10px]">STATION ID : FR-MPL-RAD-04</div>
+          <div class="text-emerald-400 text-[10px]" id="hudModality">MODALITÉ : CR / DICOM 3.0</div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1">Cholestérol HDL (mg/dL)</label>
-            <input type="number" id="inpHdlChol" value="41" min="20" max="120" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none">
-          </div>
-          <div class="flex items-center gap-4 pt-5">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="inpSmoker" checked class="rounded border-slate-700 text-cyan-500 focus:ring-0">
-              <span class="text-slate-300">Fumeur</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="inpDiabetes" class="rounded border-slate-700 text-cyan-500 focus:ring-0">
-              <span class="text-slate-300">Diabète</span>
-            </label>
-          </div>
+        <!-- Incrustation Bottom-Left -->
+        <div class="absolute bottom-3 left-4 hud-tag space-y-0.5 pointer-events-none z-10">
+          <div>W: 2450 / L: 350 (Thorax Fenêtre Tissus)</div>
+          <div class="text-slate-400 text-[10px]" id="hudStatus">ANALYSE MULTIMODALE EXÉCUTÉE</div>
         </div>
 
-        <button type="submit" id="btnSubmit" class="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 mt-4 cursor-pointer">
-          <span id="btnIcon">🔬</span>
-          <span id="btnText">Lancer l'Analyse Multimodale</span>
-        </button>
-      </form>
+        <!-- Incrustation Bottom-Right -->
+        <div class="absolute bottom-3 right-4 hud-tag text-right space-y-0.5 pointer-events-none z-10">
+          <div class="text-cyan-400 font-bold" id="hudTierBadge">STATUT : MODÉRÉ</div>
+          <div class="text-slate-400 text-[10px]">GRAD-CAM LAYER v2.1</div>
+        </div>
+
+        <!-- Image Médicale Réelle -->
+        <img id="mainViewerImg" src="/samples/real_cxr_case1_aorta.jpg" alt="Examen Radiologique" class="max-h-[560px] w-auto max-w-full object-contain transition-all duration-150">
+
+      </div>
+
+      <!-- Biomarqueurs Cliniques en Bandeau Bas -->
+      <div class="bg-slate-900/90 border-t border-slate-800 p-3 grid grid-cols-3 gap-3 text-center">
+        <div class="bg-slate-950/70 border border-slate-800/80 rounded-lg p-2.5">
+          <div class="text-[10px] font-mono text-slate-400 uppercase">Rapport Cardio-Thoracique</div>
+          <div id="valRct" class="text-lg font-bold font-mono text-cyan-400 mt-0.5">0.61</div>
+          <div class="text-[10px] text-slate-500 font-mono">Norme &lt; 0.50 (Seuil ESC)</div>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800/80 rounded-lg p-2.5">
+          <div class="text-[10px] font-mono text-slate-400 uppercase">Calcification Aortique (ICA)</div>
+          <div id="valAorta" class="text-lg font-bold font-mono text-amber-400 mt-0.5">0.78 / 1.0</div>
+          <div class="text-[10px] text-slate-500 font-mono">Bouton aortique opaque</div>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800/80 rounded-lg p-2.5">
+          <div class="text-[10px] font-mono text-slate-400 uppercase">Densité Osseuse Rachis</div>
+          <div id="valBone" class="text-lg font-bold font-mono text-teal-400 mt-0.5">0.52 / 1.0</div>
+          <div class="text-[10px] text-slate-500 font-mono">Suspicion d'ostéopénie</div>
+        </div>
+      </div>
 
     </div>
 
-    <!-- RIGHT COLUMN: DASHBOARD DE RESULTATS & GRAD-CAM (7 COLS) -->
-    <div class="lg:col-span-7 space-y-6">
+    <!-- DROITE : BILAN CLINIQUE, CONSTANTES & EXPORT PDF (5 COLS) -->
+    <div class="lg:col-span-5 flex flex-col space-y-4">
       
-      <!-- INDICATEURS DE SCORES PRINCIPAUX -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-        
-        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+      <!-- CARTE DE SCORE GLOBAL PROGESTION 5 ANS -->
+      <div class="bg-[#0B0F19] border border-slate-800 rounded-xl p-5 shadow-xl">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
           <div>
-            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200">Bilan d'Estimation des Risques à 5 Ans</h2>
-            <p class="text-xs text-slate-400 mt-0.5">Fusion de l'imagerie thoracique et des constantes SCORE2</p>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Estimation du Risque Global à 5 Ans</h2>
+            <p class="text-[11px] text-slate-400">Modèle calibré SCORE2 + biomarqueurs d'imagerie</p>
           </div>
-          <span id="badgeTier" class="text-xs font-black uppercase px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
-            Modéré
+          <span id="badgeRiskTier" class="text-xs font-black font-mono uppercase px-3 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">
+            RISQUE MODÉRÉ
           </span>
         </div>
 
-        <!-- SCORE GLOBAL + GAUGES -->
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 pt-6 items-center">
+        <!-- Jauge & Chiffres -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 items-center">
           
-          <!-- Grand Cercle Score Global -->
-          <div class="sm:col-span-1 text-center sm:text-left flex flex-col items-center sm:items-start">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Score Global</span>
-            <div class="text-4xl sm:text-5xl font-black mt-1 text-white flex items-baseline">
-              <span id="valGlobalRisk">39.4</span>
-              <span class="text-xl text-slate-500">%</span>
+          <div class="text-center sm:text-left">
+            <span class="text-[10px] text-slate-500 font-mono uppercase">Probabilité 5 Ans</span>
+            <div class="text-4xl font-black font-mono text-white tracking-tight mt-0.5">
+              <span id="txtGlobalRisk">38.5</span><span class="text-lg text-slate-500">%</span>
             </div>
-            <span class="text-[10px] text-slate-500 mt-1">Probabilité d'incident à 5 ans</span>
           </div>
 
-          <!-- Jauges Spécifiques (Cardiaque, AVC, Osseux) -->
-          <div class="sm:col-span-3 space-y-3.5">
+          <div class="sm:col-span-2 space-y-2.5">
             <!-- Risque Cardiaque -->
             <div>
-              <div class="flex justify-between text-xs font-semibold mb-1">
-                <span class="text-slate-300 flex items-center gap-1.5">🫀 Risque Cardiaque</span>
-                <span id="valCardiacRisk" class="text-cyan-400 font-bold">29.3%</span>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Risque Cardiaque (Myocarde / Coronaires)</span>
+                <span id="txtCardiacRisk" class="font-mono text-cyan-400 font-bold">29.3%</span>
               </div>
-              <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
-                <div id="barCardiac" class="bg-cyan-500 h-full rounded-full transition-all duration-700" style="width: 29.3%"></div>
+              <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                <div id="progCardiac" class="bg-cyan-500 h-full rounded-full transition-all duration-500" style="width: 29.3%"></div>
               </div>
             </div>
 
             <!-- Risque AVC -->
             <div>
-              <div class="flex justify-between text-xs font-semibold mb-1">
-                <span class="text-slate-300 flex items-center gap-1.5">🧠 Risque d'AVC</span>
-                <span id="valStrokeRisk" class="text-purple-400 font-bold">50.4%</span>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Risque AVC (Ischémie Cérébrale / Aorte)</span>
+                <span id="txtStrokeRisk" class="font-mono text-purple-400 font-bold">50.4%</span>
               </div>
-              <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
-                <div id="barStroke" class="bg-purple-500 h-full rounded-full transition-all duration-700" style="width: 50.4%"></div>
+              <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                <div id="progStroke" class="bg-purple-500 h-full rounded-full transition-all duration-500" style="width: 50.4%"></div>
               </div>
             </div>
 
             <!-- Risque Osseux -->
             <div>
-              <div class="flex justify-between text-xs font-semibold mb-1">
-                <span class="text-slate-300 flex items-center gap-1.5">🦴 Risque Osseux</span>
-                <span id="valBoneRisk" class="text-teal-400 font-bold">40.2%</span>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Anomalie Osseuse (Rachis / Tassements)</span>
+                <span id="txtBoneRisk" class="font-mono text-teal-400 font-bold">40.2%</span>
               </div>
-              <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
-                <div id="barBone" class="bg-teal-500 h-full rounded-full transition-all duration-700" style="width: 40.2%"></div>
+              <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                <div id="progBone" class="bg-teal-500 h-full rounded-full transition-all duration-500" style="width: 40.2%"></div>
               </div>
             </div>
           </div>
 
         </div>
-
       </div>
 
-      <!-- VISIONNEUSE DUAL RADIO & GRAD-CAM -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        
+      <!-- OBSERVATIONS ET CONCLUSIONS CLINIQUES -->
+      <div class="bg-[#0B0F19] border border-slate-800 rounded-xl p-4 shadow-xl space-y-2">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+          <span>🩺</span> Observations Cliniques Détaillées
+        </h3>
+        <ul id="findingsList" class="space-y-1.5 text-xs text-slate-300 pl-4 list-disc font-normal">
+          <li>Cardiomégalie radiologique modérée détectée (Rapport Cardio-Thoracique = 0.61, norme &lt; 0.50).</li>
+          <li>Calcification de la crosse aortique visible sur le bouton supérieur gauche (sur-risque cérébrovasculaire).</li>
+        </ul>
+      </div>
+
+      <!-- FORMULAIRE RAPIDE DES CONSTANTES BIOLOGIQUES -->
+      <form id="vitalsForm" class="bg-[#0B0F19] border border-slate-800 rounded-xl p-4 shadow-xl space-y-3">
         <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Constantes & Facteurs de Risque</h3>
+          <span class="text-[10px] text-slate-500 font-mono">CALIBRATION ESC</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
           <div>
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-200">Visionneuse d'Explicabilité IA</h3>
-            <p class="text-[11px] text-slate-400">Heatmap Grad-CAM des zones anatomiques déterminantes</p>
+            <label class="block text-slate-400 text-[11px] mb-0.5">Âge du patient</label>
+            <input type="number" id="vAge" value="61" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 font-mono text-xs focus:border-cyan-500 focus:outline-none">
           </div>
-
-          <!-- Switch Mode d'affichage -->
-          <div class="bg-slate-950 p-1 rounded-xl border border-slate-800 flex items-center gap-1 text-xs">
-            <button type="button" id="btnModeRaw" onclick="setImageMode('raw')" class="px-3 py-1 rounded-lg font-bold text-slate-400 hover:text-white transition">
-              Radio Brute
-            </button>
-            <button type="button" id="btnModeCam" onclick="setImageMode('cam')" class="px-3 py-1 rounded-lg font-bold bg-cyan-500 text-slate-950 shadow transition">
-              Grad-CAM
-            </button>
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-0.5">Pression Systolique (PAS mmHg)</label>
+            <input type="number" id="vSbp" value="155" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 font-mono text-xs focus:border-cyan-500 focus:outline-none">
           </div>
         </div>
 
-        <!-- Cadre de l'image -->
-        <div class="bg-slate-950 border border-slate-800 rounded-xl p-2 relative flex items-center justify-center min-h-[380px] overflow-hidden group">
-          <img id="mainViewerImg" src="/samples/sample_case1_aortic.png" class="max-h-[380px] w-auto object-contain rounded-lg transition-all duration-300">
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-0.5">Cholestérol Total (mg/dL)</label>
+            <input type="number" id="vTotChol" value="245" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 font-mono text-xs focus:border-cyan-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-0.5">Cholestérol HDL (mg/dL)</label>
+            <input type="number" id="vHdlChol" value="41" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 font-mono text-xs focus:border-cyan-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6 pt-1 text-xs">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="vSmoker" checked class="rounded border-slate-700 text-cyan-500 focus:ring-0">
+            <span class="text-slate-300">Fumeur Actif</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="vDiabetes" class="rounded border-slate-700 text-cyan-500 focus:ring-0">
+            <span class="text-slate-300">Diabète de Type II</span>
+          </label>
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <!-- Zone d'Upload DICOM / Image -->
+          <input type="file" id="fileUpload" accept="image/*,.dcm" class="hidden">
+          <button type="button" onclick="document.getElementById('fileUpload').click()" class="flex-1 py-2 px-3 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>🩻</span> Importer scan DICOM/PNG
+          </button>
           
-          <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-lg text-[10px] text-slate-300 backdrop-blur">
-            <span id="viewerLegend">Vue : <strong class="text-cyan-400">Superposition Grad-CAM (Zones critiques surlignées)</strong></span>
-          </div>
+          <button type="submit" id="btnRecalculate" class="flex-1 py-2 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-lg shadow-cyan-600/20">
+            <span>⚡</span> Recalculer
+          </button>
         </div>
+      </form>
 
-        <!-- Biomarqueurs Clés Extaits -->
-        <div class="grid grid-cols-3 gap-3 pt-2">
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-center">
-            <div class="text-[10px] text-slate-500 uppercase">Rapport RCT</div>
-            <div id="lblRct" class="text-base font-black text-cyan-400 mt-0.5">0.61</div>
-            <div class="text-[9px] text-slate-400">Norme &lt; 0.50</div>
-          </div>
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-center">
-            <div class="text-[10px] text-slate-500 uppercase">Indice Aorte ICA</div>
-            <div id="lblAorta" class="text-base font-black text-amber-400 mt-0.5">0.78 / 1.0</div>
-            <div class="text-[9px] text-slate-400">Calcification active</div>
-          </div>
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-center">
-            <div class="text-[10px] text-slate-500 uppercase">Densité Rachis</div>
-            <div id="lblSpine" class="text-base font-black text-teal-400 mt-0.5">0.52 / 1.0</div>
-            <div class="text-[9px] text-slate-400">Suspicion ostéopénie</div>
-          </div>
-        </div>
-
-        <!-- Observations Cliniques -->
-        <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-xs space-y-1.5">
-          <div class="font-bold text-slate-300 flex items-center gap-1.5">
-            <span>📝</span> Remarques Cliniques Générées :
-          </div>
-          <ul id="listFindings" class="space-y-1 text-slate-400 pl-4 list-disc">
-            <li>Cardiomégalie radiologique modérée détectée (Rapport Cardio-Thoracique = 0.61).</li>
-            <li>Calcification de la paroi de la crosse aortique visible (Indice ICA élevé, risque vasculaire accru).</li>
-          </ul>
-        </div>
-
-        <!-- BOUTON EXPORT PDF -->
-        <button type="button" onclick="exportPDF()" class="w-full py-3.5 px-4 rounded-xl font-bold text-sm bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white shadow-xl transition flex items-center justify-center gap-2 cursor-pointer">
-          <span>📄</span>
-          <span>Télécharger le Compte-Rendu Médical Officiel (PDF)</span>
-        </button>
-
-      </div>
+      <!-- BOUTON D'ACTION EXPORT RAPPORT MEDICAL OFFICIEL -->
+      <button type="button" onclick="exportPDF()" class="w-full py-3 px-4 rounded-xl font-bold text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white shadow-xl transition flex items-center justify-center gap-2 cursor-pointer mt-auto">
+        <span class="text-cyan-400">📄</span>
+        <span>Télécharger le Compte-Rendu Médical Officiel (PDF Dossier Patient)</span>
+      </button>
 
     </div>
 
   </main>
 
-  <!-- JAVASCRIPT LOGIC -->
   <script>
     let currentResult = null;
-    let selectedPresetKey = "case1";
-    let activeMode = "cam"; // "raw" ou "cam"
+    let selectedPreset = "case1";
+    let activeMode = "cam";
+    let isInverted = false;
+    let currentContrast = 100;
 
-    // Au chargement initial, lancer le cas 1
     window.addEventListener('DOMContentLoaded', () => {
       loadPreset('case1');
     });
 
-    // Chargement d'un cas prédéfini
-    async function loadPreset(caseKey) {
-      selectedPresetKey = caseKey;
-      clearUpload();
+    async function loadPreset(key) {
+      selectedPreset = key;
+      // Met à jour les onglets visuels
+      ['case1', 'case2', 'case3', 'case_dicom'].forEach(k => {
+        const el = document.getElementById('tab_' + k);
+        if (el) {
+          if (k === key) {
+            el.className = "px-2.5 py-1 rounded font-bold text-cyan-400 bg-cyan-950/70 border border-cyan-800/60";
+          } else {
+            el.className = "px-2.5 py-1 rounded font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition";
+          }
+        }
+      });
 
       try {
-        const res = await fetch('/api/presets');
-        const presets = await res.json();
-        const p = presets[caseKey];
+        const resp = await fetch('/api/presets');
+        const presets = await resp.json();
+        const p = presets[key];
         if (!p) return;
 
-        // Remplir le formulaire
-        document.getElementById('inpAge').value = p.clinical_data.age;
-        document.getElementById('inpGender').value = p.clinical_data.gender;
-        document.getElementById('inpSbp').value = p.clinical_data.systolic_bp;
-        document.getElementById('inpTotChol').value = p.clinical_data.total_cholesterol;
-        document.getElementById('inpHdlChol').value = p.clinical_data.hdl_cholesterol;
-        document.getElementById('inpSmoker').checked = p.clinical_data.smoker;
-        document.getElementById('inpDiabetes').checked = p.clinical_data.diabetes;
+        // Remplir constantes
+        document.getElementById('vAge').value = p.clinical_data.age;
+        document.getElementById('vSbp').value = p.clinical_data.systolic_bp;
+        document.getElementById('vTotChol').value = p.clinical_data.total_cholesterol;
+        document.getElementById('vHdlChol').value = p.clinical_data.hdl_cholesterol;
+        document.getElementById('vSmoker').checked = p.clinical_data.smoker;
+        document.getElementById('vDiabetes').checked = p.clinical_data.diabetes;
 
-        // Déclencher l'analyse
+        document.getElementById('hudPatientMeta').innerText = (p.clinical_data.gender === 'Masculin' ? 'M' : 'F') + ' | ' + p.clinical_data.age + 'Y | CHEST PA';
+        document.getElementById('hudModality').innerText = key === 'case_dicom' ? 'MODALITÉ : DICOM NATIVE (.dcm)' : 'MODALITÉ : DIGITAL RADIOGRAPHY';
+
         runAnalysis();
-      } catch (err) {
-        console.error("Erreur preset:", err);
+      } catch (e) {
+        console.error("Erreur preset:", e);
       }
     }
 
-    // Gestion du Drag and Drop
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-cyan-400'); });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-cyan-400'));
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('border-cyan-400');
-      if (e.dataTransfer.files.length) {
-        fileInput.files = e.dataTransfer.files;
-        handleFileSelect();
+    document.getElementById('fileUpload').addEventListener('change', (e) => {
+      if (e.target.files.length) {
+        selectedPreset = null;
+        document.getElementById('hudPatientMeta').innerText = "CUSTOM SCAN | CHEST PA";
+        runAnalysis();
       }
     });
 
-    fileInput.addEventListener('change', handleFileSelect);
-
-    function handleFileSelect() {
-      if (fileInput.files.length) {
-        selectedPresetKey = null; // Priorité au fichier uploadé
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          document.getElementById('imgThumbnail').src = e.target.result;
-          document.getElementById('uploadPrompt').classList.add('hidden');
-          document.getElementById('previewContainer').classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function clearUpload(e) {
-      if (e) e.stopPropagation();
-      fileInput.value = "";
-      document.getElementById('uploadPrompt').classList.remove('hidden');
-      document.getElementById('previewContainer').classList.add('hidden');
-    }
-
-    // Soumission du formulaire
-    document.getElementById('patientForm').addEventListener('submit', (e) => {
+    document.getElementById('vitalsForm').addEventListener('submit', (e) => {
       e.preventDefault();
       runAnalysis();
     });
 
     async function runAnalysis() {
-      const btn = document.getElementById('btnSubmit');
-      const btnText = document.getElementById('btnText');
-      btnText.innerText = "Calcul IA en cours...";
-      btn.classList.add('opacity-75');
+      const btn = document.getElementById('btnRecalculate');
+      btn.innerText = "Inférence en cours...";
 
       const formData = new FormData();
-      if (fileInput.files.length) {
-        formData.append('file', fileInput.files[0]);
-      } else if (selectedPresetKey) {
-        formData.append('preset_key', selectedPresetKey);
+      const fileInp = document.getElementById('fileUpload');
+      if (fileInp.files.length) {
+        formData.append('file', fileInp.files[0]);
+      } else if (selectedPreset) {
+        formData.append('preset_key', selectedPreset);
       }
 
       const patientData = {
-        age: parseInt(document.getElementById('inpAge').value) || 55,
-        gender: document.getElementById('inpGender').value,
-        systolic_bp: parseInt(document.getElementById('inpSbp').value) || 120,
-        total_cholesterol: parseInt(document.getElementById('inpTotChol').value) || 200,
-        hdl_cholesterol: parseInt(document.getElementById('inpHdlChol').value) || 50,
-        smoker: document.getElementById('inpSmoker').checked,
-        diabetes: document.getElementById('inpDiabetes').checked
+        age: parseInt(document.getElementById('vAge').value) || 55,
+        gender: "Masculin",
+        systolic_bp: parseInt(document.getElementById('vSbp').value) || 120,
+        total_cholesterol: parseInt(document.getElementById('vTotChol').value) || 200,
+        hdl_cholesterol: parseInt(document.getElementById('vHdlChol').value) || 50,
+        smoker: document.getElementById('vSmoker').checked,
+        diabetes: document.getElementById('vDiabetes').checked
       };
 
       formData.append('patient_json', JSON.stringify(patientData));
 
       try {
-        const resp = await fetch('/api/analyze', {
-          method: 'POST',
-          body: formData
-        });
-        if (!resp.ok) throw new Error("Erreur serveur lors de l'analyse");
-        
-        currentResult = await resp.json();
-        renderDashboard(currentResult);
+        const res = await fetch('/api/analyze', { method: 'POST', body: formData });
+        if (!res.ok) throw new Error("Erreur de calcul serveur");
+        currentResult = await res.json();
+        renderResults(currentResult);
       } catch (err) {
-        alert("Erreur lors de l'analyse : " + err.message);
+        alert("Erreur analyse : " + err.message);
       } finally {
-        btnText.innerText = "Lancer l'Analyse Multimodale";
-        btn.classList.remove('opacity-75');
+        btn.innerText = "⚡ Recalculer";
       }
     }
 
-    // Affichage des résultats dans le dashboard
-    function renderDashboard(data) {
-      const scores = data.scores;
-      const bio = data.biomarkers;
+    function renderResults(data) {
+      const s = data.scores;
+      const b = data.biomarkers;
 
-      document.getElementById('valGlobalRisk').innerText = scores.global_risk;
-      const badge = document.getElementById('badgeTier');
-      badge.innerText = scores.risk_tier;
-      badge.style.color = scores.risk_color;
-      badge.style.borderColor = scores.risk_color + "40";
-      badge.style.backgroundColor = scores.risk_color + "15";
+      document.getElementById('txtGlobalRisk').innerText = s.global_risk;
+      const badge = document.getElementById('badgeRiskTier');
+      badge.innerText = "RISQUE " + s.risk_tier.toUpperCase();
+      badge.style.color = s.risk_color;
+      badge.style.borderColor = s.risk_color + "50";
+      badge.style.backgroundColor = s.risk_color + "15";
+
+      document.getElementById('hudTierBadge').innerText = "STATUT : " + s.risk_tier.toUpperCase();
 
       // Barres
-      document.getElementById('valCardiacRisk').innerText = scores.cardiac_risk + "%";
-      document.getElementById('barCardiac').style.width = Math.min(100, scores.cardiac_risk) + "%";
+      document.getElementById('txtCardiacRisk').innerText = s.cardiac_risk + "%";
+      document.getElementById('progCardiac').style.width = Math.min(100, s.cardiac_risk) + "%";
 
-      document.getElementById('valStrokeRisk').innerText = scores.stroke_risk + "%";
-      document.getElementById('barStroke').style.width = Math.min(100, scores.stroke_risk) + "%";
+      document.getElementById('txtStrokeRisk').innerText = s.stroke_risk + "%";
+      document.getElementById('progStroke').style.width = Math.min(100, s.stroke_risk) + "%";
 
-      document.getElementById('valBoneRisk').innerText = scores.bone_risk + "%";
-      document.getElementById('barBone').style.width = Math.min(100, scores.bone_risk) + "%";
+      document.getElementById('txtBoneRisk').innerText = s.bone_risk + "%";
+      document.getElementById('progBone').style.width = Math.min(100, s.bone_risk) + "%";
 
       // Biomarqueurs
-      document.getElementById('lblRct').innerText = bio.cardiothoracic_ratio;
-      document.getElementById('lblAorta').innerText = bio.aortic_calcification_index + " / 1.0";
-      document.getElementById('lblSpine').innerText = bio.bone_attenuation_score + " / 1.0";
+      document.getElementById('valRct').innerText = b.cardiothoracic_ratio;
+      document.getElementById('valAorta').innerText = b.aortic_calcification_index + " / 1.0";
+      document.getElementById('valBone').innerText = b.bone_attenuation_score + " / 1.0";
 
       // Findings
-      const list = document.getElementById('listFindings');
+      const list = document.getElementById('findingsList');
       list.innerHTML = "";
       data.findings.forEach(f => {
         const li = document.createElement('li');
@@ -486,8 +430,7 @@
         list.appendChild(li);
       });
 
-      // Mettre à jour l'image de la visionneuse
-      updateViewerImage();
+      updateImageDisplay();
     }
 
     function setImageMode(mode) {
@@ -496,34 +439,34 @@
       const btnCam = document.getElementById('btnModeCam');
 
       if (mode === 'raw') {
-        btnRaw.className = "px-3 py-1 rounded-lg font-bold bg-cyan-500 text-slate-950 shadow transition";
-        btnCam.className = "px-3 py-1 rounded-lg font-bold text-slate-400 hover:text-white transition";
-        document.getElementById('viewerLegend').innerHTML = "Vue : <strong class='text-slate-300'>Radiographie Brute (Niveaux de gris)</strong>";
+        btnRaw.className = "px-2.5 py-1 rounded font-bold bg-cyan-600 text-white shadow-sm transition";
+        btnCam.className = "px-2.5 py-1 rounded font-semibold text-slate-400 hover:text-white transition";
       } else {
-        btnCam.className = "px-3 py-1 rounded-lg font-bold bg-cyan-500 text-slate-950 shadow transition";
-        btnRaw.className = "px-3 py-1 rounded-lg font-bold text-slate-400 hover:text-white transition";
-        document.getElementById('viewerLegend').innerHTML = "Vue : <strong class='text-cyan-400'>Superposition Grad-CAM (Heatmap des zones critiques)</strong>";
+        btnCam.className = "px-2.5 py-1 rounded font-bold bg-cyan-600 text-white shadow-sm transition";
+        btnRaw.className = "px-2.5 py-1 rounded font-semibold text-slate-400 hover:text-white transition";
       }
-      updateViewerImage();
+      updateImageDisplay();
     }
 
-    function updateViewerImage() {
+    function toggleInvert() {
+      isInverted = !isInverted;
+      updateImageDisplay();
+    }
+
+    function adjustContrast(val) {
+      currentContrast = val;
+      updateImageDisplay();
+    }
+
+    function updateImageDisplay() {
       if (!currentResult) return;
       const img = document.getElementById('mainViewerImg');
-      if (activeMode === 'raw') {
-        img.src = currentResult.images.raw_b64;
-      } else {
-        img.src = currentResult.images.gradcam_b64;
-      }
+      img.src = activeMode === 'raw' ? currentResult.images.raw_b64 : currentResult.images.gradcam_b64;
+      img.style.filter = `contrast(${currentContrast}%) ${isInverted ? 'invert(1)' : ''}`;
     }
 
-    // Export PDF
     async function exportPDF() {
-      if (!currentResult) {
-        alert("Veuillez d'abord exécuter une analyse.");
-        return;
-      }
-
+      if (!currentResult) return;
       try {
         const resp = await fetch('/api/export-pdf', {
           method: 'POST',
@@ -534,19 +477,16 @@
             doctor_name: "Dr. A. Bagnol"
           })
         });
-
-        if (!resp.ok) throw new Error("Erreur de génération PDF");
-        
         const blob = await resp.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `rapport_prevent_x_${new Date().toISOString().slice(0,10)}.pdf`;
+        a.download = `compte_rendu_prevent_x_${new Date().toISOString().slice(0,10)}.pdf`;
         document.body.appendChild(a);
         a.click();
         a.remove();
-      } catch (err) {
-        alert("Erreur lors du téléchargement du PDF : " + err.message);
+      } catch (e) {
+        alert("Erreur PDF: " + e.message);
       }
     }
   </script>

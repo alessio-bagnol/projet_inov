@@ -39,7 +39,7 @@ PRESET_CASES = {
     "case1": {
         "title": "Cas 1 : Homme 61 ans - Risque Vasculaire & AVC Élevé",
         "description": "Fumeur actif, hypertension modérée (155 mmHg). Détection précoce d'une calcification de la paroi aortique.",
-        "sample_file": "samples/sample_case1_aortic.png",
+        "sample_file": "samples/real_cxr_case1_aorta.jpg",
         "clinical_data": {
             "age": 61,
             "gender": "Masculin",
@@ -53,7 +53,7 @@ PRESET_CASES = {
     "case2": {
         "title": "Cas 2 : Femme 48 ans - Examen de Routine Sain",
         "description": "Non-fumeuse, bilan pré-opératoire. Pas de calcification aortique, silhouette cardiaque harmonieuse.",
-        "sample_file": "samples/sample_case2_normal.png",
+        "sample_file": "samples/real_cxr_case2_routine.jpg",
         "clinical_data": {
             "age": 48,
             "gender": "Féminin",
@@ -67,7 +67,7 @@ PRESET_CASES = {
     "case3": {
         "title": "Cas 3 : Femme 72 ans - Cardiomégalie & Ostéopénie",
         "description": "Diabétique traitée. Élargissement cardiaque (RCT > 0.55) et radiotransparence accrue du rachis dorsal.",
-        "sample_file": "samples/sample_case3_cardiomegaly_bone.png",
+        "sample_file": "samples/real_cxr_case3_cardiomegaly.jpg",
         "clinical_data": {
             "age": 72,
             "gender": "Féminin",
