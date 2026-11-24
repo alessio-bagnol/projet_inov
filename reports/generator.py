@@ -137,6 +137,11 @@ class ReportGenerator:
         tier_color_hex = scores["risk_color"]
         tier_color = colors.HexColor(tier_color_hex)
 
+        ci_text = ""
+        if "confidence_interval_95" in scores:
+            ci = scores["confidence_interval_95"]
+            ci_text = f"<br/><font size=7 color='#64748B'>IC 95%: [{ci[0]}% - {ci[1]}%]</font>"
+
         scores_summary_data = [
             [
                 Paragraph("<b>SCORE DE RISQUE GLOBAL</b>", ParagraphStyle('W1', parent=body_style, fontName='Helvetica-Bold', fontSize=10)),
@@ -146,7 +151,7 @@ class ReportGenerator:
             ],
             [
                 Paragraph(f"<font size=18 color='{tier_color_hex}'><b>{scores['global_risk']}%</b></font><br/>"
-                          f"<font size=9><b>Palier : {scores['risk_tier']}</b></font>", body_style),
+                          f"<font size=8.5><b>Palier : {scores['risk_tier']}</b></font>{ci_text}", body_style),
                 Paragraph(f"<font size=14 color='#0284C7'><b>{scores['cardiac_risk']}%</b></font><br/>"
                           f"<font size=8 color='#64748B'>Coronarien & myocarde</font>", body_style),
                 Paragraph(f"<font size=14 color='#7C3AED'><b>{scores['stroke_risk']}%</b></font><br/>"

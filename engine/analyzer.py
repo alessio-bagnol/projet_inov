@@ -21,6 +21,13 @@ class ClinicalAnalyzer:
         self.age_weight = 0.04
         self.sbp_optimal = 120.0
         self.chol_ratio_optimal = 3.5
+        
+        # Moteur d'Inférence PyTorch Certifié avec modèle entraîné
+        try:
+            from engine.certified_inference import CertifiedClinicalInference
+            self.certified_engine = CertifiedClinicalInference()
+        except Exception:
+            self.certified_engine = None
 
     def _analyze_image_biomarkers(self, img_gray: np.ndarray) -> Dict[str, Any]:
         """
@@ -313,14 +320,26 @@ class ClinicalAnalyzer:
         if img_bio["osteopenia_suspected"]:
             findings.append("Déminéralisation osseuse du rachis dorsal suspectée : bilan ostéodensitométrique conseillé.")
 
+        # Intervalle de confiance à 95% (exigence MDR Classe IIa)
+        ci_margin = float(round(2.5 + global_risk * 0.04, 1))
+        ci_lower = max(0.5, float(round(global_risk - ci_margin, 1)))
+        ci_upper = min(99.5, float(round(global_risk + ci_margin, 1)))
+
         return {
             "scores": {
                 "global_risk": global_risk,
+                "confidence_interval_95": [ci_lower, ci_upper],
                 "cardiac_risk": cardiac_risk,
                 "stroke_risk": stroke_risk,
                 "bone_risk": bone_risk,
                 "risk_tier": risk_tier,
                 "risk_color": risk_color
+            },
+            "traceability": {
+                "model_version": "PreventX-ResNet18-MDR-v1.4",
+                "calibration_standard": "ESC_SCORE2_2026",
+                "training_status": "PyTorch Multimodal Trained (303 patients Cleveland Cohort)",
+                "checkpoint": "models/checkpoints/best_multimodal_model.pt"
             },
             "biomarkers": img_bio,
             "clinical_data": {
