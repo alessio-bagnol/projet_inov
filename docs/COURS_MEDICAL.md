@@ -6,40 +6,37 @@ Ce guide pose les **fondations scientifiques et médicales strictes** de **PREVE
 
 ## 🫀 Chapitre 1 : Anatomie Thoracique & Projection Radiologique
 
-Pour comprendre une radio du thorax (projection postéro-antérieure PA), il faut visualiser la cage thoracique comme une superposition de densités :
+### 1. La règle d'or de la lecture radiologique : « La poignée de main »
+Quand vous regardez une radiographie du thorax de face, **vous êtes face au patient, comme si vous lui serriez la main** :
+- La droite du patient se trouve à **votre gauche**.
+- La gauche du patient se trouve à **votre droite**.
+- Le cœur est situé au milieu, mais sa grosse pointe (le ventricule gauche) penche vers la gauche du patient (donc vers **votre droite**).
 
+### 2. Comment la radio se forme (Les 3 couleurs) :
 ```mermaid
 graph TD
-    A["Faisceau de Rayons X"] --> B["Air (Poumons) : Rayons traversent -> NOIR (Radiotransparent)"]
-    A --> C["Tissus mous / Eau (Cœur, Sang, Muscles) : Absorption moyenne -> GRIS"]
-    A --> D["Os & Métal (Côtes, Rachis, Calcifications) : Rayons bloqués -> BLANC (Radio-opaque)"]
+    A["Faisceau de Rayons X"] --> B["Air (Poumons) : Rayons traversent sans obstacle -> NOIR"]
+    A --> C["Tissus mous & Sang (Cœur, Vaisseaux) : Absorption moyenne -> GRIS"]
+    A --> D["Os & Calcium (Côtes, Rachis, Calcifications) : Rayons bloqués -> BLANC"]
 ```
 
-### Les 3 Repères Anatomiques Vitaux de notre IA :
+---
 
-```
-                  [ Clavicule Droite ]           [ Clavicule Gauche ]
-                                   \               /
-                                    [ Trachée ]
-                                        |
-               ========================[ CROSSE AORTIQUE ] <--- (1) Risque AVC
-              |                         (Bouton aortique)|
-    [ Poumon Droit ]                     \               |   [ Poumon Gauche ]
-      (Noir / Air)                        [ Tronc Pulm ] |      (Noir / Air)
-                                                \        |
-                                       [ Oreillette G. ] |
-    [ Oreillette Droite ]                        \       |
-              \                                   [ VENTRICULE GAUCHE ] <--- (2) Risque Cardiaque
-               \                                  /    (Apex Cardiaque)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        [ DIAPHRAGME D. ]            [ DIAPHRAGME G. ]
-                               |
-                [ COLONNE VERTÉBRALE (RACHIS DORSAL) ] <--- (3) Risque Osseux
-```
+### 3. Schéma Visuel Annoté : Les 3 Zones Clés de notre IA
 
-1. **La Crosse Aortique (Arcus Aortae) :** L'artère géante qui éjecte le sang du cœur vers le cerveau et le reste du corps. Sur la radio, elle forme un contour arrondi bien visible en haut à gauche du cœur : le **bouton aortique**.
-2. **Le Ventricule Gauche (Apex cardiaque) :** La pompe musculaire principale. C'est elle qui détermine le volume de la silhouette cardiaque.
-3. **Le Rachis Dorsal (Vertèbres T1 à T12) :** L'armature osseuse axiale en arrière-plan au centre.
+Voici exactement comment ces 3 zones se présentent sur une véritable radiographie :
+
+![Schéma Anatomique d'une Radio du Thorax](/C:/Users/aless/.gemini/antigravity/brain/47f435d7-de23-4f73-8784-af8b905e65f7/schema_anatomie_radio.png)
+
+```mermaid
+flowchart TD
+    subgraph Cage_Thoracique [La Radio du Thorax]
+        direction TB
+        Z1["1. Crosse Aortique (En haut au centre) : Risque AVC"]
+        Z2["2. Silhouette Cardiaque (En bas à droite sur l'écran) : Risque Cardiaque"]
+        Z3["3. Rachis Dorsal (La colonne verticale au centre) : Risque Osseux"]
+    end
+```
 
 ---
 
@@ -47,14 +44,14 @@ graph TD
 
 ### 1. Que se passe-t-il dans le corps ?
 L'ennemi silencieux numéro un est l'**athérosclérose** combinée à l'**hypertension artérielle** :
-- **Excès de cholestérol LDL + Tabac** $\rightarrow$ Création de plaques lipidiques molles dans les parois des artères coronaires (celles qui nourrissent le myocarde).
-- **Hypertension artérielle permanente ($> 140$ mmHg)** $\rightarrow$ Le cœur doit forcer à chaque battement pour éjecter le sang contre une pression trop haute.
-- **Le phénomène du bodybuilder** : Tout muscle qui force grossit. Le muscle cardiaque s'épaissit d'abord (hypertrophie ventriculaire gauche), puis s'épuise, se détend et se dilate : c'est la **cardiomégalie**.
+- **Excès de cholestérol LDL + Tabac** $\rightarrow$ Création de plaques lipidiques molles dans les parois des artères coronaires (celles qui nourrissent le muscle du cœur).
+- **Hypertension artérielle permanente ($> 140$ mmHg)** $\rightarrow$ Le cœur doit forcer à chaque battement pour éjecter le sang contre une pression trop haute dans les tuyaux.
+- **Le phénomène du bodybuilder** : Tout muscle qui force grossit. Le muscle cardiaque s'épaissit d'abord (hypertrophie), puis s'épuise, se détend et se dilate : c'est la **cardiomégalie**.
 
 ### 2. Ce qu'on observe sur la radio : Le Rapport Cardio-Thoracique (RCT)
-En radiologie, le volume cardiaque ne se mesure pas en centimètres absolus (car cela dépend de la taille de la personne), mais en **proportion par rapport à la cage thoracique** :
+En radiologie, le volume cardiaque se mesure en **proportion par rapport à la largeur totale de la cage thoracique** :
 
-$$RCT = \frac{\text{Diamètre Transverse Maximal du Cœur}}{\text{Diamètre Transverse Maximal du Thorax}}$$
+$$RCT = \frac{\text{Largeur Maximale du Cœur}}{\text{Largeur Maximale de la Cage Thoracique}}$$
 
 ```mermaid
 graph LR
@@ -66,7 +63,7 @@ graph LR
 ```
 
 > [!IMPORTANT]
-> Un RCT $> 0.52$ chez un patient hypertendu est l'un des signaux d'alerte les plus fiables d'accident cardiaque décompensé dans les 5 ans.
+> Un RCT $> 0.52$ chez un patient hypertendu est un signal d'alerte clinique majeur : le cœur est en sur-régime permanent.
 
 ---
 
@@ -76,12 +73,9 @@ graph LR
 Dans 85% des cas, un AVC est provoqué par l'obstruction d'une artère cérébrale par un **caillot** ou un **débris de plaque d'athérome**.
 
 ### 2. Pourquoi la Crosse Aortique est le point critique ?
-Regardez l'arbre vasculaire :
-- Du sommet de la crosse aortique partent directement les **artères carotides** (droite et gauche).
-- Les carotides montent dans le cou et irriguent directement le cerveau.
-- Si la crosse aortique est saine, ses parois sont élastiques, souples et invisibles en radiographie.
-- Si le patient fume ou a du cholestérol depuis 15 ans : du calcium précipite dans les plaques. La paroi de l'aorte devient rigide et cassante : c'est la **calcification de l'arche aortique**.
-- **Le mécanisme de l'accident :** Le flux sanguin turbulent arrache des micro-fragments calcifiés de la crosse aortique. Ces fragments montent à toute vitesse dans les carotides et bouchent une artériole du cerveau $\rightarrow$ **AVC instantané**.
+- Du sommet de la crosse aortique partent directement les **artères carotides** qui montent dans le cou irriguer le cerveau.
+- Si le patient fume ou a trop de cholestérol depuis des années, du **calcium** précipite dans les parois de l'aorte : elle devient rigide comme un vieux tuyau entartré.
+- Avec le flux sanguin puissant expulsé par le cœur, des micro-fragments de calcaire se détachent, sont propulsés dans les carotides et bouchent instantanément une artère du cerveau $\rightarrow$ **AVC**.
 
 ```mermaid
 sequenceDiagram
@@ -95,7 +89,7 @@ sequenceDiagram
 ```
 
 ### 3. Ce que l'œil humain et l'IA voient : L'Indice de Calcification Aortique (ICA)
-Sur la radio, une crosse calcifiée n'est plus grise translucide : elle présente un **arc blanc opaque très net** (le "bouton aortique en coquille d'œuf").
+Sur la radio, une crosse saine est grise et discrète. Une crosse calcifiée et dangereuse présente un **liseré blanc très opaque et dense** (le "bouton aortique calcifié").
 
 ---
 
@@ -103,54 +97,44 @@ Sur la radio, une crosse calcifiée n'est plus grise translucide : elle présent
 
 ### 1. Pourquoi analyser les os sur une radio du cœur/poumons ?
 C'est le principe du **dépistage opportuniste** (*opportunistic screening*) :
-- La plupart des gens ne font jamais d'ostéodensitométrie (DEXA) avant d'avoir une fracture grave du col du fémur (qui entraîne 20% de décès chez les personnes âgées dans l'année).
-- Mais ils font des radios thoraciques régulières ! Et sur cette radio, les vertèbres dorsales sont là, bien visibles.
+- Les gens ne font presque jamais de radio des os avant de s'être fracturé le col du fémur (ce qui tue 20% des personnes âgées dans l'année).
+- En revanche, ils font souvent des radios du thorax pour une bronchite ou un bilan opératoire. Et au milieu de cette radio, **les vertèbres dorsales sont parfaitement visibles**.
 
-### 2. Le mécanisme de l'ostéopénie et du tassement :
-- Avec l'âge et la ménopause, l'os perd sa trame calcaire (ostéopénie $\rightarrow$ ostéoporose).
-- Sur la radiographie, les vertèbres normales sont claires et régulières. Les vertèbres ostéoporotiques deviennent **noires / transparentes** (les rayons X traversent sans résistance).
-- Sous le poids de la colonne, la vertèbre fragilisée s'écrase sur elle-même : c'est le **tassement vertébral**.
-- **Règle clinique d'or :** Un micro-tassement vertébral non diagnostiqué multiplie par **5** le risque de fracture du fémur dans les 3 ans.
+### 2. Le mécanisme du tassement vertébral :
+- Avec l'âge, l'os perd son calcium : sur la radio, la vertèbre devient de plus en plus sombre/transparente.
+- Fragilisée, elle s'écrase sous le poids du haut du corps : la vertèbre perd de sa hauteur.
+- **Règle clinique d'or :** Un micro-tassement vertébral visible sur une radio du thorax multiplie par **5** le risque de fracture grave de la hanche dans les 3 ans.
 
 ---
 
-## 🔬 Chapitre 5 : Le Croisement Multimodal (Pourquoi l'IA dépasse la médecine classique)
-
-C'est ici que se trouve le **cœur scientifique de PREVENT-X AI** :
+## 🔬 Chapitre 5 : Le Croisement Multimodal (Pourquoi l'IA bat la médecine classique)
 
 ```mermaid
 graph TD
-    subgraph Clinique_Seule [Approche Médicale Classique : Formulaire SCORE2]
+    subgraph Clinique_Seule [Formulaire Classique (Score SCORE2)]
         C1["Âge: 58 ans"]
         C2["Tension: 155 mmHg"]
         C3["Fumeur: Oui"]
-        C1 & C2 & C3 --> C_RES["Score statistique moyen de population : ~12% (Risque Modéré)"]
+        C1 & C2 & C3 --> C_RES["Score statistique théorique : ~12% (Risque Modéré)"]
     end
 
-    subgraph Imagerie_Seule [Approche Radiologique Classique]
-        R1["Lecture visuelle rapide du poumon pour toux"]
+    subgraph Imagerie_Seule [Radio Thorax Classique]
+        R1["Lecture rapide des poumons"]
         R1 --> R_RES["Poumons clairs. (L'aorte calcifiée n'est pas quantifiée)"]
     end
 
-    subgraph PREVENT_X [Approche PREVENT-X AI : FUSION MULTIMODALE]
+    subgraph PREVENT_X [PREVENT-X AI : FUSION MULTIMODALE]
         C_RES -.-> FUSION["Moteur de Fusion IA"]
         R_RES -.-> FUSION
         IMG["Extraction : Aorte calcifiée (ICA 0.78) + RCT 0.54"] --> FUSION
         FUSION --> FINAL["Risque Réel Requalifié : 48% (Risque Élevé d'AVC sous 5 ans)"]
-        FUSION --> HEATMAP["Heatmap Grad-CAM sur la crosse pour prouver au médecin"]
+        FUSION --> HEATMAP["Heatmap Grad-CAM rouge sur la crosse pour prouver au médecin"]
     end
 ```
-
-### Le diagnostic croisé :
-- Deux personnes ont exactement le même âge (58 ans) et la même tension (155 mmHg) :
-  - **Patient A :** Sa radio montre une aorte souple et un RCT normal ($0.45$) $\rightarrow$ Risque réel maîtrisé ($14\%$).
-  - **Patient B :** Sa radio montre une crosse aortique calcifiée (ICA $0.78$) et un ventricule gauche épaissi ($0.54$) $\rightarrow$ **Risque réel critique ($48\%$) : l'accident vasculaire est imminent sans traitement préventif.**
 
 ---
 
 ## 🎯 Chapitre 6 : Les 4 Priorités Absolues de notre Projet
-
-Pour que vous sachiez exactement sur quoi vous concentrer au quotidien :
 
 | Priorité | Cible Anatomique | Ce qu'on analyse | Valeur Normale | Valeur d'Alerte |
 | :--- | :--- | :--- | :--- | :--- |
